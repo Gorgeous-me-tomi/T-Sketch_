@@ -1,0 +1,197 @@
+
+
+/* span.about {
+    display: block;
+    font-size: 18px;
+    text-align: center;
+    line-height: 3;
+} */
+
+/*
+.form-container {
+    background: black;
+    color: white;
+    line-height: 2.5;
+    padding: 1.5rem 5rem;
+    width: 100%;
+    height: 400px;
+}
+*/
+
+body {
+    background-color: lightgray;
+}
+
+
+/* .file-selector-box .brand{
+    color: white;
+    background-color: black;
+    padding: 20px 0;
+    text-align: center;
+    border-radius: 15px 15px 0px 0px;
+    margin-bottom: 0px;
+
+}
+
+.main-form{
+    padding: 30px 0;
+    text-align: center;
+    background-color: #292b2c;
+
+}
+
+.img-preview{
+    margin: 20px;
+    border: 2px dotted black;
+}
+*/
+
+.body-container{
+    margin: 6rem auto 2rem;
+    padding: 0 2rem;
+}
+
+.brand{
+    color: #fff;
+    display: block;
+    font-weight: bolder;
+    text-decoration: none;
+    font-size: 30px;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.brand:hover{
+    color: white;
+}
+
+.about h1{
+    color: black;
+    font-weight: bolder;
+    letter-spacing: 6px;
+    margin: 30px 0;
+    text-align: center;
+
+}
+
+.about p{
+    font-size: 20px;
+    letter-spacing: 1.3px;
+}
+
+.about .proof-image img{
+    width: 80%;
+    height: 400px;
+    margin: 0 auto;
+}
+
+.app-section {
+    width: 100%;
+    background-color: white;
+    padding: 10px 50px;
+    border: 1px solid #d2d2dc;
+    border-radius: 10px;
+}
+
+.sketch-form {
+    display: flex;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    padding-top: 20px;
+}
+
+.form-control[type=file] {
+    overflow: hidden;
+}
+
+
+@media (max-width: 420px) {
+
+
+    .app-section {
+        padding: 10px 20px;
+    }
+
+    .sketch-form{
+        flex-direction: column;
+    }
+
+    .sketch-form input[type=submit] {
+        width: 50%;
+        margin: 20px 0;
+    }
+
+}
+
+form .form-control {
+    display: block;
+    width: 100%;
+    background-color: transparent;
+    border-radius: 3px;
+    padding: 0.875rem 1.375rem;
+    font-size: 1rem;
+    line-height: 1;
+}
+
+nav .picture-toggle {
+    display: flex;
+}
+
+nav .nav .tog-text.active {
+    color: #0D6EFD;
+    text-decoration: overline;
+    font-weight: bold;
+}
+
+nav .picture-toggle li {
+    list-style-type: none;
+    margin-left: 20px;
+    font-size: 22px;
+}
+
+nav .picture-toggle li:hover {
+    color: #0D6EFD;
+    cursor: pointer;
+}
+
+.display-images{
+    width: 70%;
+    height: 400px;
+    margin: 0 auto;
+    border: 1px solid gray;
+    background-position: center;
+    background-size: cover;
+}
+
+.images-section .pag-contents {
+    display: none;
+}
+
+.images-section .pag-contents .edit{
+    color: white;
+    font-weight: bolder;
+    letter-spacing: 1px;
+
+    width: 100px;
+    padding: 10px 0;
+    margin: 20px 10px 0 auto;
+    border-radius: 100px;
+    background-color: black;
+}
+
+.images-section .pag-contents .edit:hover{
+    cursor: pointer;
+}
+
+
+.action-box .download-image span{
+    display: block;
+    opacity: 0.8;
+    margin-top: 5px;
+    font-size: 15px;
+    text-transform: capitalize;
+    letter-spacing: 1px;
+}
+
+
+

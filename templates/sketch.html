@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+
+{% block title %} T-Sketch {% endblock %}
+
+
+<!--{% with messages = get_flashed_messages() %}-->
+<!--  {% if messages %}-->
+<!--    <ul class=flashes>-->
+<!--    {% for message in messages %}-->
+<!--      <li>{{ message }}</li>-->
+<!--    {% endfor %}-->
+<!--    </ul>-->
+<!--  {% endif %}-->
+<!--{% endwith %}-->
+
+
+{% block content %}
+
+<div class="app-section">
+
+    <form class="sketch-form" action="{{url_for('sketch', type='file')}}" method="POST" enctype="multipart/form-data">
+      <input type="file" id="file" name='file' class="form-control">
+      <input type='submit' value="Make Sketch" class='btn btn-primary ms-2 '>
+    </form>
+
+    <h5 class="text-center"> OR you could also paste a <a data-bs-toggle="modal" href="#ModalUrlLink">URL</a></h5>
+
+
+     <!-- Modals For URL links-->
+    <div class="modal fade" id="ModalUrlLink" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="ModalLab">Image URL</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+
+          <div class="modal-body">
+            <form action="{{url_for('sketch', type='url')}}" method="post">
+                <div class="input-group mb-3">
+                    <input type="text" name="link" class="form-control" placeholder="URL address" aria-label="email" aria-describedby="basic-addon1">
+                    <input class="btn btn-primary" data-bs-dismiss="modal" type="submit" value="Make Sketch">
+                </div>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+</div>
+<!--Sketch Section-->
+
+ <div class="app-section mt-5">
+
+    <div class="row mt-4 overflow-hidden">
+        {% if get_flashed_messages() != [] %}
+           {% for message in get_flashed_messages() %}
+                {% if status_code %}
+                    <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/{{status_code}}" target="_blank">
+                        <h4 class="text-center text-decoration-underline" style="color: red; font-weight: bolder;"> {{message}}</h4>
+                    </a>
+                {% else %}
+                <h4 class="text-center" style="color: red; font-weight: bolder;">{{message}}</h4>
+                {% endif %}
+
+           {% endfor %}
+
+        {% else %}
+        <a href="{{url_for('home')}}" class="text-center" > <i class="bi bi-x" style="font-size: 30px"> </i> </a>
+        <h5 class="mb-4 text-center" style="line-height: 1.5"> <i class="bi bi-info-circle-fill"></i> If sketched image is not as you which try <strong>editing</strong> to change the thickness </h5>
+
+
+        <nav class="mb-4">
+            <ul class="nav picture-toggle">
+                <li onclick="pagination(0)" class="nav-item tog-text"> Original </li>
+
+                <li onclick="pagination(1)" class="nav-item active tog-text"> Sketched Image </li>
+
+            </ul>
+
+
+        </nav>
+
+        <!--Images Section-->
+        <div class="col-12 col-lg-7 mb-3 mt-2 text-center images-section">
+
+            <!--Original Image-->
+            <div class="pag-contents">
+                <a data-bs-toggle="modal" data-bs-target="#ModalOrg">
+                    <div class="display-images" style="background-image: url('../static/uploads/{{ org_img_name }}')"></div>
+                </a>
+            </div>
+
+            <!--Sketched Image-->
+            <div class="pag-contents" style="display: block">
+                <a data-bs-toggle="modal" data-bs-target="#ModalSketch">
+                    <div class="display-images" style="background-image: url('../static/uploads/{{ sketch_img_name }}')">
+                        <div class="edit" data-bs-toggle="modal" data-bs-target="#staticBackdrop"> <i class="bi bi-brush-fill"></i> Edit </div>
+                    </div>
+                </a>
+
+                {% if blurry %} <p> <strong> Sketched image is probably blurry because of the original image </strong> </p> {% endif %}
+
+            </div>
+
+        </div>
+
+        <!--Download Section-->
+        <div class="col-12 col-lg-5 d-flex flex-column align-items-center" style="margin-top: 5rem">
+
+            <div class="download-image mb-4">
+                <a href="static/uploads/{{ sketch_img_name }}" download> <button class="btn btn-primary px-5 rounded-pill"> <i class="bi bi-download"></i> Download </button> </a>
+                <span class="d-block"> <i class="bi bi-info-circle-fill"></i> Preview Image 300 × 400 </span>
+            </div>
+
+
+            <div class="share-image">
+                <button type="button" class="btn btn-outline-primary px-5 mt-2 rounded-pill" data-bs-toggle="modal" data-bs-target="#ModalEmail"> Share via Email </button>
+            </div>
+
+        </div>
+
+         <!-- Modal For Email-->
+        <div class="modal fade" id="ModalEmail" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="ModalLabel">Your Email Address</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+
+              <div class="modal-body">
+                  <form action="{{url_for('share', email=True, file=sketch_img_name)}}" method="post">
+                      <div class="input-group mb-3">
+                          <input type="text" name="email" class="form-control" placeholder="Email" aria-label="email" aria-describedby="basic-addon1">
+                          <input class="btn btn-primary" data-bs-dismiss="modal" type="submit" value="Share">
+                      </div>
+                  </form>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal for Editing -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Editing</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  <div class="text-center">
+                      <p><i class="bi bi-info-circle-fill"></i> 5 is the default thickness</p>
+                      <form action="{{url_for('sketch', type='edit', image=org_img_name)}}" method="post">
+                          <label for="thickness" class="d-block"> <strong>Thickness: </strong> </label>
+                          <select name="thickness" id="thickness" class="px-5">
+                              <option value="11">5</option>
+                              <option value="21">10</option>
+                              <option value="31">15</option>
+                              <option value="41">20</option>
+                              <option value="51">40</option>
+                              <option value="61">60</option>
+                              <option value="71">80</option>
+                              <option value="81">100</option>
+                              <option value="91">120</option>
+                              <option value="101">140</option>
+                          </select>
+                          <input class="btn btn-primary" type="submit" value="Edit">
+                      </form>
+
+
+                  </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}
+
+
