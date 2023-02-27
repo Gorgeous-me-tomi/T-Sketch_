@@ -27,8 +27,6 @@ def allowed_file(filename):
 
 def make_sketch(img, thickness):
     grey_scale = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    # grey_scale = img
-    # inverted_img = cv2.bitwise_not(grey_scale)
     inverted_img = 255-grey_scale
     blurred_img = cv2.GaussianBlur(inverted_img, thickness, sigmaX=0, sigmaY=0)
     sketched_img = cv2.divide(grey_scale, 255-blurred_img, scale=256)
@@ -141,25 +139,4 @@ def share():
 
 
 if __name__ == '__main__':
-    # print('Here')
-    app.run()
-    # def create_app():
-    #     return app
-    # from waitress import create_server, serve
-# from waitress import serve
-# print(app)
-# serve(app, listen='*:8080')
-    # serve(create_app, host="0.0.0.0", port=8080)
-    # def create_app():
-    #     return app
-    # server = create_server(app)
-    # print(server.run())
-    # print(server)
-    # server.run()
-    # print('here 2')
-    # serve(app, port=8080, url_scheme='https')
-    # print(s)
-    # print('here 3')
-    # def create_app():
-    #     return app
-    # app.run(debug=True, host='0.0.0.0', port=8080)
+    app.run(debug=True, port=os.getenv("PORT", default=5000))
