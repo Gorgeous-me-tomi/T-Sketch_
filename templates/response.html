@@ -5,8 +5,8 @@
 
 
 {% block content %}
-
-    <h3>{{msg}}</h3>
+   
+    <h3  {% if status%} style='color:green' {% endif %}>{{msg}}</h3>
     <a href="{{url_for('home')}}">Back to homepage</a>
 
 {% endblock %}
