@@ -93,6 +93,12 @@ body {
     border-radius: 10px;
 }
 
+.alternate-option{
+    font-size: 26pt;
+    text-align: center;
+    margin: 30px 0;
+}
+
 .sketch-form {
     display: flex;
     margin-top: 20px;
