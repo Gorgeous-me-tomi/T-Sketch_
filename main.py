@@ -11,7 +11,7 @@ from my_requests import Connect
 import json
 
 from dotenv import load_dotenv
-load_dotenv()
+load_dotenv(override=True)
 
 UPLOAD_FOLDER = 'static/uploads'
 SUPPORTED_EXTENSIONS = ['png', 'jpg', 'jpeg']
@@ -118,7 +118,6 @@ def sketch():
 
         img_url = request.form['link']
             
-
         # Handling the requesting image url errors
         try:
             res = r.get(img_url, stream=True)
@@ -165,32 +164,12 @@ def share():
         sending_email = requests.send_email_pic(r_email=request.form['email'], img_loc=f"{UPLOAD_FOLDER}/{image_name}", img_name=image_name)
         if sending_email is False:
             err_msg = 'An error occurred while trying to send the email. Check internet connection and try again or you can also try re-uploading the image'
-            return render_template('response.html', msg=err_msg)
+            return render_template('response.html', msg=err_msg, status=False)
 
         success_msg = f"Email has been sent to {request.form['email']}"
-        return render_template('response.html', msg=success_msg)
+        return render_template('response.html', msg=success_msg, status=True)
 
 
 if __name__ == '__main__':
-    # print('Here')
     app.run(debug=True)
-    # def create_app():
-    #     return app
-    # from waitress import create_server, serve
-# from waitress import serve
-# print(app)
-# serve(app, listen='*:8080')
-    # serve(create_app, host="0.0.0.0", port=8080)
-    # def create_app():
-    #     return app
-    # server = create_server(app)
-    # print(server.run())
-    # print(server)
-    # server.run()
-    # print('here 2')
-    # serve(app, port=8080, url_scheme='https')
-    # print(s)
-    # print('here 3')
-    # def create_app():
-    #     return app
-    # app.run(debug=True, host='0.0.0.0', port=808
+    
