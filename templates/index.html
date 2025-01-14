@@ -4,8 +4,8 @@
 
 {% block content %}
 
-<div class="app-section">
-
+<section class="app-section">
+    <h4 class="pt-3 text-center">Select a file</h4>
     <form class="sketch-form" action="{{url_for('sketch', type='file')}}" method="POST" enctype="multipart/form-data">
       <input type="file" id="file" name='file' class="form-control">
       <input type='submit' value="Make Sketch" class='btn btn-primary ms-2'>
@@ -35,42 +35,35 @@
         </div>
       </div>
     </div>
-</div>
 
+    <!-- Chat Gpt Generate -->
+
+  </section>
+
+  <p class="alternate-option" ></p>
+
+<section class="app-section mt-5">
+  <h4 class="pt-3 text-center text-danger">Describe an image to sketch</h4>
+  <form class="sketch-form" action="{{url_for('sketch', type='text_img')}}" method="POST">
+    <input type="text" name="described_img" id="" class="form-control" placeholder="Describe an Image to Sketch">
+    <input type='submit' value="Make Sketch" class='btn btn-danger ms-2'>
+  </form>
+</section>
 
 <div class="about app-section mt-5">
-    <h1> About </h1>
+  <h1> About </h1>
 
-    <h5 class="mb-4 text-secondary">About Application</h5>
-    <p> <strong>T-Sketch</strong> is a web application that enables Users to sketch a picture either by uploading or pasting URL. </p>
-    <p> This application was developed by a 14 years programmer <strong>Erinle Tomisin</strong> for an <a href="http://www.aptechabeokuta.com.ng/" target="_blank"> Aptech Career Quest presentation</a>.</p>
-    <p> T-Sketch was developed with  <strong>Html</strong>, <strong>Css</strong>, <strong>Bootstrap</strong>, <strong>JavaScript</strong> and <strong>Flask</strong>. </p>
+  <h5 class="mb-4 text-secondary">About Application</h5>
+  <p> <strong>T-Sketch</strong> is a web application created by flask a python FrameWork that enable users to sketch any uploaded image. It was modified further using AI to create sketches on any image. </p>
+  <p> T-Sketch was developed with  <strong>Html</strong>, <strong>Css</strong>, <strong>Bootstrap</strong>, <strong>JavaScript</strong> and <strong>Flask</strong>. </p>
 
-    <!--About me-->
-    <h5 class="mt-5 mb-4 text-secondary">About Developer</h5>
-    <div class="">
-        <img class="d-block rounded-circle border m-auto mb-4" src="static/images/portfolio-2-TSketch-removebg-preview.png" alt="my_pics" srcset="" width="150px" height="150px">
-        <p class="mb-5"> <strong>Erinle Tomisin</strong> is a 14 years old <strong> Website Designer, Data Scientist and a Graphic Designer </strong>  having the knowledge of above 4 Programming language, 3 Frameworks and 15 different modules in python.</p>
+    <h4>Whats the idea?</h4>
+    <p>Sketches are an irreplaceable method of recording thoughts and of correcting the 
+      design process. They are a means of discovering and examining reality which supports 
+      the development of imagination. Sketching is an essential element in the education of architects and a crucial ingredient 
+      of their professional skills.</p>
 
-        <h5 class="my-3 text-center">Contact</h5>
-
-       <div class="row border py-3">
-              <div class="col-12 col-sm-6">
-                <ul style="list-style-type: none;">
-                  <li><strong>Name: </strong>Erinle Tomisin</li>
-                  <li><strong>Phone: </strong>+234 814 523 5799</li>
-                  <li><strong>Email: </strong>tomisinerinle4@gmail.com</li>
-                </ul>
-              </div>
-
-              <div class="col-12 col-sm-6 ps-sm-2">
-                <ul style="list-style-type: none;">
-                  <li><strong>Age: </strong>14</li>
-                  <li><strong>City: </strong>Abeokuta, NIGERIA</li>
-                  <li><strong>Freelancer: </strong>Available</li>
-                </ul>
-              </div>
-
+    <p>Drawing beats out reading and writing to help students remember concepts. Research has shown that drawing can be a potent tool for learning. It can help students understand content better and and retain information more effectively. </p>
 <!--        <ul>-->
 <!--            <li>Html</li>-->
 <!--            <li>Css</li>-->
@@ -80,17 +73,12 @@
 <!--            <li>Javascript</li>-->
 
 <!--        </ul>-->
-    </div>
 
 
 
 </div>
 
-</div>
-{% if sketch_img_name %}
 
-
-{% endif %}
 
 {% endblock %}
 
