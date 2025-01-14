@@ -1,16 +1,24 @@
 import os
 import cv2
+import io
+import random
 from PIL import Image
 from werkzeug.utils import secure_filename
 from flask import Flask, render_template, redirect, url_for, request, flash
 
 import requests as r
 from my_requests import Connect
+import json
+
 from dotenv import load_dotenv
 load_dotenv()
 
 UPLOAD_FOLDER = 'static/uploads'
 SUPPORTED_EXTENSIONS = ['png', 'jpg', 'jpeg']
+# Image.LOAD_TRUNCATED_IMAGES = True
+
+
+# text_to_img_bytes("An apple on a bicycle")
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -23,10 +31,14 @@ def allowed_file(filename):
     if filename.split('.')[1] in SUPPORTED_EXTENSIONS:
         print(filename.split('.')[1])
         return True
+    return False
+
 
 
 def make_sketch(img, thickness):
     grey_scale = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    # grey_scale = img
+    # inverted_img = cv2.bitwise_not(grey_scale)
     inverted_img = 255-grey_scale
     blurred_img = cv2.GaussianBlur(inverted_img, thickness, sigmaX=0, sigmaY=0)
     sketched_img = cv2.divide(grey_scale, 255-blurred_img, scale=256)
@@ -34,7 +46,7 @@ def make_sketch(img, thickness):
     return final_result
 
 
-def sketch_process_complete(filename, thickness_value):
+def sketch_process_complete(filename, thickness_value = (11, 11)):
     img = cv2.imread(f'{UPLOAD_FOLDER}/{filename}')
     sketch_img = make_sketch(img, thickness_value)
     sketch_img_name = filename.split('.')[0] + "-TSketch.jpg"
@@ -50,6 +62,24 @@ def sketch_process_complete(filename, thickness_value):
 
     return render_template('sketch.html', org_img_name=filename, sketch_img_name=sketch_img_name, blurry=is_blurry)
 
+def text_to_img_bytes(text):
+    import base64
+    response = r.post('https://clipdrop-api.co/text-to-image/v1',
+    files = {
+        'prompt': (None, text, 'text/plain')
+    },
+    headers = { 'x-api-key': os.getenv('text_image_key')}
+    )
+    if (response.ok):
+    # r.content contains the bytes of the returned image#
+        print(response.content)
+        filename = f"Text-to-image bytes{random.randint(0,3000)}.png"
+        # image_data = base64.b64decode(response.content)
+        image = Image.open(io.BytesIO(response.content))
+        image.save(f'{UPLOAD_FOLDER}/{filename}')
+        return sketch_process_complete(filename)
+    else:
+        response.raise_for_status()
 
 @app.route('/')
 def home():
@@ -58,33 +88,36 @@ def home():
 
 @app.route('/sketch', methods=['POST'])
 def sketch():
-    thickness = (11, 11)
     if request.args.get('type') == 'edit':
         filename = request.args.get('image')
         thickness_value = request.form['thickness']
         thickness = (int(thickness_value), int(thickness_value))
-        # print(thickness)
         return sketch_process_complete(filename, thickness)
 
-    if request.args.get('type') == 'file':
+    if request.args.get('type') == 'file' or request.args.get('type') == 'text_img':
+        if request.args.get('type') == 'text_img':
+            return text_to_img_bytes(text=request.form.get('described_img'))
+
         file = request.files['file']
         filename = secure_filename(file.filename)
 
         if file and allowed_file(filename):
             file.save(f'{UPLOAD_FOLDER}/{filename}')
-            return sketch_process_complete(filename, thickness)
+            return sketch_process_complete(filename)
 
+   
         else:
             flash(f'Try uploading images with these extension {SUPPORTED_EXTENSIONS}')
             return render_template('sketch.html')
 
     elif request.args.get('type') == 'url':
-
+        
         if 'http://' not in request.form['link'] and 'https://' not in request.form['link']:
             flash(f"Insert a recognised Url rather than '{request.form['link']}' ")
             return render_template('sketch.html')
 
         img_url = request.form['link']
+            
 
         # Handling the requesting image url errors
         try:
@@ -107,7 +140,7 @@ def sketch():
                     return render_template('sketch.html')
 
                 else:
-                    return sketch_process_complete(filename, thickness)
+                    return sketch_process_complete(filename)
 
         elif res.status_code == 404:
             flash('Image url not found on the internet')
@@ -139,4 +172,25 @@ def share():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=os.getenv("PORT", default=5000))
+    # print('Here')
+    app.run(debug=True)
+    # def create_app():
+    #     return app
+    # from waitress import create_server, serve
+# from waitress import serve
+# print(app)
+# serve(app, listen='*:8080')
+    # serve(create_app, host="0.0.0.0", port=8080)
+    # def create_app():
+    #     return app
+    # server = create_server(app)
+    # print(server.run())
+    # print(server)
+    # server.run()
+    # print('here 2')
+    # serve(app, port=8080, url_scheme='https')
+    # print(s)
+    # print('here 3')
+    # def create_app():
+    #     return app
+    # app.run(debug=True, host='0.0.0.0', port=808

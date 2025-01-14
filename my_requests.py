@@ -15,6 +15,7 @@ class Connect:
         msg['To'] = receiver_email
         msg.set_content('Your sketched picture\nThank you for choosing T-Digital-Sketch')
         try:
+            print(img_name)
             with open(img_loc, 'rb') as img_file:
                 file_data = img_file.read()
                 file_name = img_name
@@ -24,8 +25,7 @@ class Connect:
             msg.add_attachment(file_data, maintype='image', subtype=file_type, filename=file_name)
 
 
-            with smtplib.SMTP_SSL('smtp.gmail.com') as smtp:
-                # smtp.starttls()
+            with smtplib.SMTP('smtp.gmail.com') as smtp:
                 print(smtp.user)
                 smtp.login(user=my_email, password=password)
                 smtp.send_message(msg)
